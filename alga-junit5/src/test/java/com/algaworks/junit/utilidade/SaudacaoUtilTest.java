@@ -1,9 +1,8 @@
 package com.algaworks.junit.utilidade;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class SaudacaoUtilTest {
 
@@ -19,8 +18,7 @@ class SaudacaoUtilTest {
     public void saudar() {
         String saudacao = SaudacaoUtil.saudar(9);
         // Testa e espera que o valor da variável saudacao seja igual a "Bom dia"
-        Assertions.assertTrue(saudacao.equals("Bom dia"));
-//        Assertions.assertEquals("Bom dia", saudacao);
+        assertEquals("Bom dia", saudacao, "Saudação incorreta!");
     }
 
 }
