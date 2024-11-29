@@ -1,6 +1,7 @@
 package com.algaworks.junit.utilidade;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
@@ -16,6 +17,7 @@ class SimuladorEsperaTest {
      * org.opentest4j.AssertionFailedError: execution exceeded timeout of 1000 ms by 9001 ms
      * */
     @Test
+    @Disabled("Não é mais aplicável") // exemplo de desativação de um teste
     void deveEsperarENaoDarTimeout() {
         Assertions.assertTimeout(Duration.ofSeconds(2),
                 () -> SimuladorEspera.esperar(Duration.ofSeconds(1)));
