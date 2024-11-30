@@ -41,6 +41,16 @@
 					</archive>
 				</configuration>
 			</plugin>
+			<!-- Plugin do Surefire para controlar testes pelo Maven -->
+			<!--
+			 mvn test
+			 mvn clean package (já realiza os testes)
+			 mvn clean package -Dmaven.test.skip=true (ignora os testes, útil conforome a pipeline de build)
+			 -->
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.2</version>
+			</plugin>
 		</plugins>
 	</build>
 
