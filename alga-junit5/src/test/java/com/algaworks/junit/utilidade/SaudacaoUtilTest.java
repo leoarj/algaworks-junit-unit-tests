@@ -1,6 +1,7 @@
 package com.algaworks.junit.utilidade;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,32 +17,48 @@ class SaudacaoUtilTest {
      */
     @Test
     public void deveSaudarComBomDiaQuandoHoraValida() {
-        String saudacao = SaudacaoUtil.saudar(9);
-        // Testa e espera que o valor da variável saudacao seja igual a "Bom dia"
+        /*
+        * Padrão Tripe A (Arrange, Act e Assert)
+        * - Preparação das variáveis de teste
+        * - Execução/definição das lógicas
+        * - Verificação dos resultados dos testes
+        * */
+
+        // Arrange
+        int horaValida = 9;
+
+        // Act
+        String saudacao = SaudacaoUtil.saudar(horaValida);
+
+        // Assert
         assertEquals("Bom dia", saudacao, "Saudação incorreta!");
     }
 
     @Test
     public void deveSaudarComBomDiaQuandoHoraValidaAPartir5h() {
-        String saudacao = SaudacaoUtil.saudar(5);
+        int horaValida = 5;
+        String saudacao = SaudacaoUtil.saudar(horaValida);
         assertEquals("Bom dia", saudacao, "Saudação incorreta!");
     }
 
     @Test
     void deveSaudarComBoaTardeQuandoHoraValida() {
-        String saudacao = SaudacaoUtil.saudar(17);
+        int horaValida = 17;
+        String saudacao = SaudacaoUtil.saudar(horaValida);
         assertEquals("Boa tarde", saudacao, "Saudação incorreta!");
     }
 
     @Test
     void deveSaudarComBoaNoiteQuandoHoraValida() {
-        String saudacao = SaudacaoUtil.saudar(21);
+        int horaValida = 21;
+        String saudacao = SaudacaoUtil.saudar(horaValida);
         assertEquals("Boa noite", saudacao, "Saudação incorreta!");
     }
 
     @Test
     void deveSaudarComBoaNoiteQuandoHoraValidaAs4h() {
-        String saudacao = SaudacaoUtil.saudar(4);
+        int horaValida = 4;
+        String saudacao = SaudacaoUtil.saudar(horaValida);
         assertEquals("Boa noite", saudacao, "Saudação incorreta!");
     }
 
@@ -53,9 +70,13 @@ class SaudacaoUtilTest {
      */
     @Test
     public void deveLancarException() {
-        IllegalArgumentException illegalArgumentException = assertThrows(IllegalArgumentException.class,
-                () -> SaudacaoUtil.saudar(-10));
-        assertEquals("Hora inválida", illegalArgumentException.getMessage());
+        // Arrange
+        int horaValida = -10;
+        // Act
+        Executable chamadaInvalidaDeMetodo = () -> SaudacaoUtil.saudar(horaValida);
+        //Assert
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, chamadaInvalidaDeMetodo);
+        assertEquals("Hora inválida", e.getMessage());
     }
 
     /**
@@ -65,7 +86,12 @@ class SaudacaoUtilTest {
      * */
     @Test
     public void naoDeveLancarException() {
-        assertDoesNotThrow(() -> SaudacaoUtil.saudar(0));
+        // Arrange
+        int horaValida = 0;
+        // Act
+        Executable chamadaValidaDeMetodo = () -> SaudacaoUtil.saudar(horaValida);
+        // Assert
+        assertDoesNotThrow(chamadaValidaDeMetodo);
     }
 
 }
