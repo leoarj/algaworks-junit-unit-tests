@@ -15,10 +15,22 @@ class SaudacaoUtilTest {
      * podemos verificar os resultados e fazer o self-validating do teste.
      */
     @Test
-    public void saudar() {
+    public void deveSaudarComBomDiaQuandoHoraValida() {
         String saudacao = SaudacaoUtil.saudar(9);
         // Testa e espera que o valor da variável saudacao seja igual a "Bom dia"
         assertEquals("Bom dia", saudacao, "Saudação incorreta!");
+    }
+
+    @Test
+    void deveSaudarComBoaTardeQuandoHoraValida() {
+        String saudacao = SaudacaoUtil.saudar(17);
+        assertEquals("Boa tarde", saudacao, "Saudação incorreta!");
+    }
+
+    @Test
+    void deveSaudarComBoaNoiteQuandoHoraValida() {
+        String saudacao = SaudacaoUtil.saudar(21);
+        assertEquals("Boa noite", saudacao, "Saudação incorreta!");
     }
 
     /**
