@@ -7,9 +7,7 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
@@ -38,6 +36,13 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CadastroEditorComMockTest {
 
     Editor editor;
+
+    /*
+    * Anotação @Captor, pode ser usada para inicializar o ArgumentCaptor, para a class definida.
+    * Obs.: Executado a cada teste
+    * */
+    @Captor
+    ArgumentCaptor<Mensagem> mensagemArgumentCaptor;
 
     /*
     * Anotação @Mock permite que o Mockito crie um mock do tipo anotado.
@@ -115,6 +120,29 @@ public class CadastroEditorComMockTest {
                 () -> assertThrows(RuntimeException.class, () -> cadastroEditor.criar(editor)),
                 () -> Mockito.verify(gerenciadorEnvioEmail, Mockito.never()).enviarEmail(Mockito.any())
         );
+    }
+
+    /**
+     * Teste para ArgumentCaptor, para capturar argumentos em uma chamada de método de um mock.
+     * No caso, capturando o argumento que foi passado e recuperando o valor para realizar asserções necessárias.
+     *
+     * Para esta situação, o e-mail do destinatário da mensagem deve ser o mesmo que do editor.
+     * */
+    @Test
+    void Dado_um_editor_valido_Quando_cadastrar_Entao_deve_enviar_email_com_destino_ao_editor() {
+        // Criando ArgumentCaptor
+//        ArgumentCaptor<Mensagem> mensagemArgumentCaptor = ArgumentCaptor.forClass(Mensagem.class);
+
+        // Internamento vai chamar o envio de e-mail
+        Editor editorSalvo = cadastroEditor.criar(editor);
+
+        // Configura a captura, para quando o método do mock for chamado
+        Mockito.verify(gerenciadorEnvioEmail).enviarEmail(mensagemArgumentCaptor.capture());
+
+        // Recupera o valor argumento passado no método do mock
+        Mensagem mensagem = mensagemArgumentCaptor.getValue();
+
+        assertEquals(editorSalvo.getEmail(), mensagem.getDestinatario());
     }
 
 }
