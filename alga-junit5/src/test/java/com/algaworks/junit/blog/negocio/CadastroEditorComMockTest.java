@@ -78,9 +78,21 @@ public class CadastroEditorComMockTest {
     }
 
     @Test
-    public void Dado_um_editor_valido_Quando_criar_Entao_deve_retornar_um_id_de_cadastro() {
+    void Dado_um_editor_valido_Quando_criar_Entao_deve_retornar_um_id_de_cadastro() {
         Editor editorSalvo = cadastroEditor.criar(editor);
         assertEquals(1L, editorSalvo.getId());
+    }
+
+    /**
+     * Teste com Mockito.verify(), verifica se chamada do método foi chamada n vezes,
+     * e se o argumento do método passado foi o mesmo repassado para o método da classe que está tendo
+     * o comportamento verificado.
+     * */
+    @Test
+    void Dado_um_editor_valido_Quando_criar_Entao_deve_chamar_metodo_salvar_do_armazenamento() {
+        cadastroEditor.criar(editor);
+        Mockito.verify(armazenamentoEditor, Mockito.times(1))
+                .salvar(Mockito.eq(editor));
     }
 
 }
