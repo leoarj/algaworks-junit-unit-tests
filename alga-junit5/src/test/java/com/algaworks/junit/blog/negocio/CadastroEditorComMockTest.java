@@ -1,6 +1,7 @@
 package com.algaworks.junit.blog.negocio;
 
 import com.algaworks.junit.blog.armazenamento.ArmazenamentoEditor;
+import com.algaworks.junit.blog.exception.RegraNegocioException;
 import com.algaworks.junit.blog.modelo.Editor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -11,6 +12,8 @@ import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.util.Optional;
+import java.util.OptionalInt;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -162,6 +165,30 @@ public class CadastroEditorComMockTest {
 //        Editor editorSpy = Mockito.spy(editor);
         cadastroEditor.criar(editor);
         Mockito.verify(editor, Mockito.atLeast(1)).getEmail();
+    }
+
+    /**
+     * Exemplo de teste com alteração do retorno conforme chamadas consecutivas.
+     * */
+    @Test
+    void Dado_um_editor_com_email_existente_Quando_cadastrar_Entao_deve_lancar_exception() {
+        /*
+        * Configura para quando chamar na primeira vez, retorne um Optional vazio,
+        * na segunda vez um objeto (já cadastrado).
+        *
+        * Dessa forma, na segunda chamada do método que depende da verificação do email,
+        * é esperado que retorne uma exception.
+        * */
+        Mockito.when(armazenamentoEditor.encontrarPorEmail("leandro@email.com"))
+                .thenReturn(Optional.empty()) // definição para primeira chamada
+                .thenReturn(Optional.of(editor)); // definição para segunda chamada
+
+        Editor editorComEmailExistente = new Editor(null, "Leandro", "leandro@email.com", BigDecimal.TEN, true);
+
+        cadastroEditor.criar(editor); // execução de primeira chamada
+
+        // execução de segunda chamada
+        assertThrows(RegraNegocioException.class, () -> cadastroEditor.criar(editorComEmailExistente));
     }
 
 }
