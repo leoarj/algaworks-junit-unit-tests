@@ -14,7 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Exemplo de uso de mocks.
@@ -93,6 +93,28 @@ public class CadastroEditorComMockTest {
         cadastroEditor.criar(editor);
         Mockito.verify(armazenamentoEditor, Mockito.times(1))
                 .salvar(Mockito.eq(editor));
+    }
+
+    /**
+     * Testa o lançamento de exceptions, customizando um mock para que caso determinado método seja chamado,
+     * uma Runtime exception seja lançada.
+     *
+     * Em seguida, verifica as asserções para que:
+     * - A exceção realmente seja lançada.
+     * - Verifica se o método de um mock deve ser chamado nesta determinada situação.
+     *
+     * thenThrow() = Lança uma exceção caso determinado comportamento seja chamado.
+     * never() = Método do mock nunca deve ser chamado, conforme o fluxo definido.
+     * any() = Qualquer argumento passado.
+     *
+     * */
+    @Test
+    void Dado_um_editor_valido_Quando_criar_e_lancar_exception_ao_salvar_Entao_nao_deve_enviar_email() {
+        Mockito.when(armazenamentoEditor.salvar(editor)).thenThrow(new RuntimeException());
+        assertAll("Não deve enviar e-mail, quando lançar exception do armazenamento",
+                () -> assertThrows(RuntimeException.class, () -> cadastroEditor.criar(editor)),
+                () -> Mockito.verify(gerenciadorEnvioEmail, Mockito.never()).enviarEmail(Mockito.any())
+        );
     }
 
 }
