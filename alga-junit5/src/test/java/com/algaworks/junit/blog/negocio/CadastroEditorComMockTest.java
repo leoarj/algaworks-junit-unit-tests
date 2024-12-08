@@ -191,4 +191,19 @@ public class CadastroEditorComMockTest {
         assertThrows(RegraNegocioException.class, () -> cadastroEditor.criar(editorComEmailExistente));
     }
 
+    /**
+     * Exemplo de verificação da ordem de execução de métodos para objetos mock.
+     * Útil para assegurar que uma sequência correta de operações seja chamada na regra de negócio.
+     * */
+    @Test
+    void Dado_um_editor_valido_Quando_cadastrar_Entao_deve_enviar_email_apos_salvar() {
+        cadastroEditor.criar(editor);
+
+        // armazenamentoEditor e gerenciadorEnvioEmail já são mocks
+        // aqui está verificando a sequência de execção deles
+        InOrder inOrder = Mockito.inOrder(armazenamentoEditor, gerenciadorEnvioEmail);
+        inOrder.verify(armazenamentoEditor, Mockito.times(1)).salvar(editor);
+        inOrder.verify(gerenciadorEnvioEmail, Mockito.times(1)).enviarEmail(Mockito.any(Mensagem.class));
+    }
+
 }
