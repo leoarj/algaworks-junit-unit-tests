@@ -35,7 +35,15 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 public class CadastroEditorComMockTest {
 
-    Editor editor;
+    /*
+    * Anotação @Spy torna o objeto observável para verificar chamadas de método.
+    * Obs.: Executado a cada teste
+    *
+    * Editor sendo inicializado aqui, para não substituir o skyp do Mockito,
+    * caso estivesse inicializando pelo @BeforeEach/init().
+    * */
+    @Spy
+    Editor editor = new Editor(null, "Leandro", "leandro@email.com", BigDecimal.TEN, true);
 
     /*
     * Anotação @Captor, pode ser usada para inicializar o ArgumentCaptor, para a class definida.
@@ -65,8 +73,6 @@ public class CadastroEditorComMockTest {
 
     @BeforeEach
     void init() {
-        editor = new Editor(null, "Leandro", "leandro@email.com", BigDecimal.TEN, true);
-
         // Define comportamentos dos mocks
 //        Mockito.when(armazenamentoEditor.salvar(editor))
 //                .thenReturn(new Editor(1L, "Leandro", "leandro@email.com", BigDecimal.TEN, true));
@@ -143,6 +149,19 @@ public class CadastroEditorComMockTest {
         Mensagem mensagem = mensagemArgumentCaptor.getValue();
 
         assertEquals(editorSalvo.getEmail(), mensagem.getDestinatario());
+    }
+
+    /**
+     * Teste com spy().
+     * spy() = Permite observar objetos e verificações de chamadas de seus métodos.
+     * O objeto "espionado" deve ser passado como argumento nos métodos que se deseja testar.
+     * */
+    @Test
+    void Dado_um_editor_valido_Quando_cadastrar_Entao_deve_verificar_o_email() {
+        // Criando objeto spy
+//        Editor editorSpy = Mockito.spy(editor);
+        cadastroEditor.criar(editor);
+        Mockito.verify(editor, Mockito.atLeast(1)).getEmail();
     }
 
 }
