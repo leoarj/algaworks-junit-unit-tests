@@ -63,8 +63,17 @@ public class CadastroEditorComMockTest {
         editor = new Editor(null, "Leandro", "leandro@email.com", BigDecimal.TEN, true);
 
         // Define comportamentos dos mocks
+//        Mockito.when(armazenamentoEditor.salvar(editor))
+//                .thenReturn(new Editor(1L, "Leandro", "leandro@email.com", BigDecimal.TEN, true));
+
+        // Com thenAnswer() é possível personalizar o parâmetro passado na invocação.
         Mockito.when(armazenamentoEditor.salvar(editor))
-                .thenReturn(new Editor(1L, "Leandro", "leandro@email.com", BigDecimal.TEN, true));
+                .thenAnswer(invocation -> {
+                   Editor editorPassado = invocation.getArgument(0, Editor.class);
+                   editorPassado.setId(1L);
+                   return editorPassado;
+                });
+
     }
 
     @Test
