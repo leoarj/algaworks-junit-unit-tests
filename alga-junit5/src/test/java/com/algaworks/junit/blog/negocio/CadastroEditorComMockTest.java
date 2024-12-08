@@ -1,6 +1,7 @@
 package com.algaworks.junit.blog.negocio;
 
 import com.algaworks.junit.blog.armazenamento.ArmazenamentoEditor;
+import com.algaworks.junit.blog.exception.EditorNaoEncontradoException;
 import com.algaworks.junit.blog.exception.RegraNegocioException;
 import com.algaworks.junit.blog.modelo.Editor;
 import org.junit.jupiter.api.*;
@@ -36,16 +37,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CadastroEditorComMockTest {
 
     /*
-    * Anotação @Spy torna o objeto observável para verificar chamadas de método.
-    * Obs.: Executado a cada teste
-    *
-    * Editor sendo inicializado aqui, para não substituir o skyp do Mockito,
-    * caso estivesse inicializando pelo @BeforeEach/init().
-    * */
-    @Spy
-    Editor editor = new Editor(null, "Leandro", "leandro@email.com", BigDecimal.TEN, true);
-
-    /*
     * Anotação @Captor, pode ser usada para inicializar o ArgumentCaptor, para a class definida.
     * Obs.: Executado a cada teste
     * */
@@ -73,6 +64,16 @@ public class CadastroEditorComMockTest {
 
     @Nested
     class CadastroComEditorValido {
+
+        /*
+         * Anotação @Spy torna o objeto observável para verificar chamadas de método.
+         * Obs.: Executado a cada teste
+         *
+         * Editor sendo inicializado aqui, para não substituir o skyp do Mockito,
+         * caso estivesse inicializando pelo @BeforeEach/init().
+         * */
+        @Spy
+        Editor editor = new Editor(null, "Leandro", "leandro@email.com", BigDecimal.TEN, true);
 
         @BeforeEach
         void init() {
@@ -220,11 +221,77 @@ public class CadastroEditorComMockTest {
          * */
         @Test
         void Dado_um_editor_null_Quando_cadastrar_Entao_deve_lancar_exception() {
-            assertThrows(NullPointerException.class, () -> cadastroEditor.criar(editor));
+            assertThrows(NullPointerException.class, () -> cadastroEditor.criar(null));
             Mockito.verify(armazenamentoEditor, Mockito.never()).salvar(Mockito.any());
             Mockito.verify(gerenciadorEnvioEmail, Mockito.never()).enviarEmail(Mockito.any());
         }
 
+    }
+
+    @Nested
+    class EdicaoComEditorValido {
+
+        @Spy
+        Editor editor = new Editor(1L, "Leandro", "leandro@email.com", BigDecimal.TEN, true);
+
+        @BeforeEach
+        void init() {
+            // Deve retornar o editor passado
+            Mockito.when(armazenamentoEditor.salvar(editor))
+                    .thenAnswer(invocationOnMock -> invocationOnMock.getArgument(0, Editor.class));
+            // Deve retornar editor existente pelo id existente
+            Mockito.when(armazenamentoEditor.encontrarPorId(1L))
+                    .thenReturn(Optional.of(editor));
+        }
+
+        /**
+         * Exemplo de teste com cenário de edição.
+         *
+         * Etapas:
+         * - Fornece um editor com ID existente, com dados atualizados.
+         * - Chama método de edição (como "editor" é um mock, então as verificações podem ser feitas nele).
+         * - Verifica se o "editor" chamou o método "atualizarComDados 01" vez.
+         * - Verifica a ordem de execução:
+         *  - Primeiro, se "editor" chamou seu método de atualização
+         *  - Segundo, se "armazenamentoEditor" chamou seu método salvar().
+         * */
+        @Test
+        void Dado_um_editor_valido_Quando_editar_Entao_deve_alterar_editor_salvo() {
+            Editor editorAtualizado = new Editor(1L, "Leandro Araújo", "leandro.araujo@email.com", BigDecimal.ZERO, false);
+
+            cadastroEditor.editar(editorAtualizado);
+
+            Mockito.verify(editor, Mockito.times(1)).atualizarComDados(editorAtualizado);
+
+            InOrder inOrder = Mockito.inOrder(editor, armazenamentoEditor);
+            inOrder.verify(editor).atualizarComDados(editorAtualizado);
+            inOrder.verify(armazenamentoEditor).salvar(editor);
+        }
+
+    }
+
+    @Nested
+    class EdicaoComEditorInexistente {
+
+        // Aqui "editor" não precisa ser um spy, já que nenhuma ação posterior à tentativa de edição será executada
+        Editor editor = new Editor(99L, "Leandro", "leandro@email.com", BigDecimal.TEN, true);
+
+        @BeforeEach
+        void init() {
+            Mockito.when(armazenamentoEditor.encontrarPorId(99L))
+                    .thenReturn(Optional.empty());
+        }
+
+        /**
+         * Exemplo de teste com objeto inexistente na base de dados fictícia.
+         * - Deve lançar exception
+         * - Método "salvar" do armazenamento nunca deve ter sido chamado, para qualquer objeto de Editor.
+         * */
+        @Test
+        void Dado_um_editor_que_nao_exista_Quando_editar_Entao_deve_lancar_exception() {
+            assertThrows(EditorNaoEncontradoException.class, () -> cadastroEditor.editar(editor));
+            Mockito.verify(armazenamentoEditor, Mockito.never()).salvar(Mockito.any(Editor.class));
+        }
     }
 
 }
