@@ -67,7 +67,8 @@ public class CadastroEditorComMockTest {
 //                .thenReturn(new Editor(1L, "Leandro", "leandro@email.com", BigDecimal.TEN, true));
 
         // Com thenAnswer() é possível personalizar o parâmetro passado na invocação.
-        Mockito.when(armazenamentoEditor.salvar(editor))
+        // Com Mockito.any() é possível deixar o parâmetro dinâmico para o tipo definido, em vez de passar um objeto fixo
+        Mockito.when(armazenamentoEditor.salvar(Mockito.any(Editor.class)))
                 .thenAnswer(invocation -> {
                    Editor editorPassado = invocation.getArgument(0, Editor.class);
                    editorPassado.setId(1L);
