@@ -64,3 +64,14 @@ Break points
 Run Debug
 Step Into etc...
 Útil para maior detalhamento
+
+Stub - Implementação falsa/dublê
+
+O que é Mock
+    Implementação falsa/fictícia, isolamento de dependências
+
+    Possui vantagens a mais que o Stub
+        - Não é necessário implementar uma interface ou estender uma classe (pode ser criada em tempo de compilação)
+        - Facilidade de definir um comportamento fictício dinâmico em uma classe
+        - Verificar comportamento da classe com mock
+Mockito + JUnit

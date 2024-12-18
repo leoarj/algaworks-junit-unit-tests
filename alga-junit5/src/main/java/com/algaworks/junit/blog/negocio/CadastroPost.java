@@ -38,7 +38,8 @@ public class CadastroPost {
 
         Post post = this.armazenamentoPost.encontrarPorId(postAtualizado.getId())
                 .orElseThrow(PostNaoEncontradoException::new);
-        post.atualizarComDados(post);
+//        post.atualizarComDados(post);
+        post.atualizarComDados(postAtualizado); // correção
 
         if (!post.isPago()) {
             post.setGanhos(this.calculadoraGanhos.calcular(post));
