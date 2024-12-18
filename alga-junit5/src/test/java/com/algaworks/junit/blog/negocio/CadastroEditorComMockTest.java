@@ -73,7 +73,7 @@ public class CadastroEditorComMockTest {
          * caso estivesse inicializando pelo @BeforeEach/init().
          * */
         @Spy
-        Editor editor = EditorTestData.umEditorNovo();
+        Editor editor = EditorTestData.umEditorNovo().build();
 
         @BeforeEach
         void init() {
@@ -185,7 +185,7 @@ public class CadastroEditorComMockTest {
                     .thenReturn(Optional.empty()) // definição para primeira chamada
                     .thenReturn(Optional.of(editor)); // definição para segunda chamada
 
-            Editor editorComEmailExistente = EditorTestData.umEditorNovo();
+            Editor editorComEmailExistente = EditorTestData.umEditorNovo().build();
 
             cadastroEditor.criar(editor); // execução de primeira chamada
 
@@ -232,7 +232,7 @@ public class CadastroEditorComMockTest {
     class EdicaoComEditorValido {
 
         @Spy
-        Editor editor = EditorTestData.umEditorExistente();
+        Editor editor = EditorTestData.umEditorExistente().build();
 
         @BeforeEach
         void init() {
@@ -257,9 +257,10 @@ public class CadastroEditorComMockTest {
          * */
         @Test
         void Dado_um_editor_valido_Quando_editar_Entao_deve_alterar_editor_salvo() {
-            Editor editorAtualizado = EditorTestData.umEditorExistente();
-            editorAtualizado.setEmail("leandro.araujo@email.com");
-            editorAtualizado.setNome("Leandro Araújo");
+            Editor editorAtualizado = EditorTestData.umEditorExistente()
+                    .email("leandro.araujo@email.com")
+                    .nome("Leandro Araújo")
+                    .build();
 
             cadastroEditor.editar(editorAtualizado);
 
@@ -276,7 +277,7 @@ public class CadastroEditorComMockTest {
     class EdicaoComEditorInexistente {
 
         // Aqui "editor" não precisa ser um spy, já que nenhuma ação posterior à tentativa de edição será executada
-        Editor editor = EditorTestData.umEditorComIdInexistente();
+        Editor editor = EditorTestData.umEditorComIdInexistente().build();
 
         @BeforeEach
         void init() {
