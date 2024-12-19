@@ -3,7 +3,6 @@ package com.algaworks.junit.blog.negocio;
 import com.algaworks.junit.blog.armazenamento.ArmazenamentoPost;
 import com.algaworks.junit.blog.exception.PostNaoEncontradoException;
 import com.algaworks.junit.blog.exception.RegraNegocioException;
-import com.algaworks.junit.blog.modelo.Editor;
 import com.algaworks.junit.blog.modelo.Ganhos;
 import com.algaworks.junit.blog.modelo.Notificacao;
 import com.algaworks.junit.blog.modelo.Post;
@@ -36,9 +35,6 @@ class CadastroPostTest {
     @InjectMocks
     CadastroPost cadastroPost;
 
-    @Spy
-    Editor editor = new Editor(1L, "Leandro", "leandro@email.com", BigDecimal.TEN, true);
-
     //DONE: Ações principais
     //DONE: Retornos principais
     //DONE: Sequências principais
@@ -52,8 +48,7 @@ class CadastroPostTest {
         class QuandoCriar {
 
             @Spy
-            Post post = new Post("Testes unitários com Mockito", "Testes unitários com Mockito", editor,
-                    false, false);
+            Post post = PostTestData.umPostNovo().build();
 
             static final long idValido = 1L;
 
@@ -218,8 +213,7 @@ class CadastroPostTest {
             static final long idValido = 1L;
 
             @Spy
-            Post post = new Post(idValido, "Testes unitários com Mockito", "Testes unitários com Mockito", editor,
-                    "testes-unitarios-com-mockito", new Ganhos(BigDecimal.TEN, 4, new BigDecimal("40")), true, true);
+            Post post = PostTestData.umPostExistente().build();
 
             @BeforeEach
             void init() {
@@ -341,8 +335,10 @@ class CadastroPostTest {
             final long idValido = 1L;
 
             @Spy
-            Post post = new Post(idValido, "Testes unitários com Mockito", "Testes unitários com Mockito", editor,
-                    "testes-unitarios-com-mockito", new Ganhos(BigDecimal.TEN, 4, new BigDecimal("40")), false, false);
+            Post post = PostTestData.umPostExistente()
+                    .pago(false)
+                    .publicado(false)
+                    .build();
 
             @BeforeEach
             void init() {
@@ -469,9 +465,7 @@ class CadastroPostTest {
         static final long idInvalido = 99L;
 
         @Spy
-        Post post = new Post(idInvalido, "Testes unitários com Mockito", "Testes unitários com Mockito", editor,
-                "testes-unitarios-com-mockito", new Ganhos(BigDecimal.TEN, 4, new BigDecimal("40")), false, false);
-
+        Post post = PostTestData.umPostComIdInexistente().build();
 
         @Nested
         @DisplayName("Quando editar")
