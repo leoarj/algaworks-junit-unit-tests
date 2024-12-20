@@ -5,6 +5,8 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -98,6 +100,17 @@ class SaudacaoUtilTest {
         Executable chamadaValidaDeMetodo = () -> SaudacaoUtil.saudar(horaValida);
         // Assert
         assertDoesNotThrow(chamadaValidaDeMetodo);
+    }
+
+    /**
+     * Exemplo de teste paramêtrizado.
+     * Para cada valor no array da anotação @ValueSource, um teste será executado.
+     * */
+    @ParameterizedTest
+    @ValueSource(ints = {5, 6, 7, 8, 9, 10, 11})
+    public void Dado_horario_matinal_Entao_deve_retornar_bom_dia(int hora) {
+        String saudacao = SaudacaoUtil.saudar(hora);
+        assertEquals("Bom dia", saudacao, "Saudação incorreta!");
     }
 
 }
