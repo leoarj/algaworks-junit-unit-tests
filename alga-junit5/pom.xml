@@ -52,7 +52,7 @@
 		</dependency>
 		<!-- Dependência do AssertJ -->
 		<!--
-			Biblioteca de asserções, que fornece mais asserções além das padrão do JUnit.
+			Biblioteca de asserções, que fornece mais asserções além das asserções padrão do JUnit.
 		-->
 		<dependency>
 			<groupId>org.assertj</groupId>
