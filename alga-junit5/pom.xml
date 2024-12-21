@@ -50,6 +50,16 @@
 			<version>5.11.0</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- Dependência do AssertJ -->
+		<!--
+			Biblioteca de asserções, que fornece mais asserções além das asserções padrão do JUnit.
+		-->
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>3.26.3</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

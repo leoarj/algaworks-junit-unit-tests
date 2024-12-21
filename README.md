@@ -89,3 +89,19 @@ Verificar cobertura de operações CRUD
 Lacunas = Mostra apenas por onde o teste passou, não leva em conta as asserções.
 
 JACOCO opera a nível de byte-code, então, mostrará mais métodos na cobertura.
+
+AssertJ
+Biblioteca de asserções
+
+- Melhora legibilidade
+- Conjunto diverso de asserções
+- Mensagens mais detalhadas
+
+Módulos
+- Core
+- Guava
+- Joda Time
+- Neodj
+- Database
+- Swing
+

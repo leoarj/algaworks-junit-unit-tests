@@ -1,5 +1,6 @@
 package com.algaworks.junit.utilidade;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -8,6 +9,8 @@ import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import static com.algaworks.junit.utilidade.SaudacaoUtilConditions.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class) // exemplo para nome amigável na hora de executar os testes
@@ -36,9 +39,22 @@ class SaudacaoUtilTest {
 
         // Act
         String saudacao = SaudacaoUtil.saudar(horaValida);
+//        String saudacaoCorreta = "Bom dia";
 
         // Assert
-        assertEquals("Bom dia", saudacao, "Saudação incorreta!");
+//        assertEquals("Bom dia", saudacao, "Saudação incorreta!");
+
+        /*
+        * Com AssertJ
+        *
+        * Adiciona asserção com mensagens personalizadas de execução e falha.
+        * */
+//        assertThat(saudacao)
+//                .as("Validando se a saudação é %s", saudacaoCorreta) // Mensagem de execução
+//                .withFailMessage("Erro: Saudação incorreta! Resultado: %s", saudacao) // Mensagem de falha
+//                .isEqualTo(saudacaoCorreta);
+        // Utilizando interface Condition para encapsular lógica e simplificar estrutura dos testes
+        assertThat(saudacao).is(igualBomDia());
     }
 
     @Test
@@ -81,10 +97,23 @@ class SaudacaoUtilTest {
         // Arrange
         int horaValida = -10;
         // Act
-        Executable chamadaInvalidaDeMetodo = () -> SaudacaoUtil.saudar(horaValida);
+//        Executable chamadaInvalidaDeMetodo = () -> SaudacaoUtil.saudar(horaValida);
         //Assert
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, chamadaInvalidaDeMetodo);
-        assertEquals("Hora inválida", e.getMessage());
+//        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, chamadaInvalidaDeMetodo);
+//        assertEquals("Hora inválida", e.getMessage());
+
+        /*
+        * Com AssertJ
+        * */
+
+        // Modo depreciado, para recuperar verificar e verificar a exception
+//        IllegalArgumentException e = catchThrowableOfType(() -> SaudacaoUtil.saudar(horaValida), IllegalArgumentException.class);
+//        assertThat(e).hasMessage("Hora inválida");
+
+        // Modo com verificação encadeada
+        assertThatThrownBy(() -> SaudacaoUtil.saudar(horaValida))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Hora inválida");
     }
 
     /**

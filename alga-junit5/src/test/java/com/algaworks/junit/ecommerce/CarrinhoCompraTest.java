@@ -1,5 +1,6 @@
 package com.algaworks.junit.ecommerce;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 
 import java.math.BigDecimal;
@@ -85,6 +86,21 @@ class CarrinhoCompraTest {
                 void quantidadeTotalDeveSerZero() {
                     assertEquals(0, carrinho.getQuantidadeTotalDeProdutos());
                 }
+            }
+
+            /**
+             * Teste utilizando AssertJ para asserções múltiplas em listas.
+             * */
+            @Test
+            @DisplayName("Deve conter apenas itens adicionados")
+            void deveConterApenasItensAdicionados() {
+                carrinho.adicionarProduto(produtoCelular, 1);
+                carrinho.adicionarProduto(produtoFoneOuvido, 1);
+
+                Assertions.assertThat(carrinho.getItens())
+                        .flatMap(ItemCarrinhoCompra::getProduto)
+                        .contains(produtoCelular, produtoFoneOuvido)
+                        .doesNotContain(produtoTablet);
             }
         }
 
