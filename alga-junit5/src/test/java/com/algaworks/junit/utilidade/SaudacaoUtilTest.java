@@ -1,5 +1,6 @@
 package com.algaworks.junit.utilidade;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class) // exemplo para nome amigável na hora de executar os testes
@@ -38,7 +40,10 @@ class SaudacaoUtilTest {
         String saudacao = SaudacaoUtil.saudar(horaValida);
 
         // Assert
-        assertEquals("Bom dia", saudacao, "Saudação incorreta!");
+//        assertEquals("Bom dia", saudacao, "Saudação incorreta!");
+
+        // Com AssertJ
+        assertThat(saudacao).isEqualTo("Bom dia");
     }
 
     @Test
