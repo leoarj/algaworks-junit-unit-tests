@@ -9,6 +9,7 @@ import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import static com.algaworks.junit.utilidade.SaudacaoUtilConditions.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -38,12 +39,22 @@ class SaudacaoUtilTest {
 
         // Act
         String saudacao = SaudacaoUtil.saudar(horaValida);
+//        String saudacaoCorreta = "Bom dia";
 
         // Assert
 //        assertEquals("Bom dia", saudacao, "Saudação incorreta!");
 
-        // Com AssertJ
-        assertThat(saudacao).isEqualTo("Bom dia");
+        /*
+        * Com AssertJ
+        *
+        * Adiciona asserção com mensagens personalizadas de execução e falha.
+        * */
+//        assertThat(saudacao)
+//                .as("Validando se a saudação é %s", saudacaoCorreta) // Mensagem de execução
+//                .withFailMessage("Erro: Saudação incorreta! Resultado: %s", saudacao) // Mensagem de falha
+//                .isEqualTo(saudacaoCorreta);
+        // Utilizando interface Condition para encapsular lógica e simplificar estrutura dos testes
+        assertThat(saudacao).is(igualBomDia());
     }
 
     @Test
