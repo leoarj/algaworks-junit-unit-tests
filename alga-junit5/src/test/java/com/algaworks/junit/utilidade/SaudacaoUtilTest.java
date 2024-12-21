@@ -86,10 +86,23 @@ class SaudacaoUtilTest {
         // Arrange
         int horaValida = -10;
         // Act
-        Executable chamadaInvalidaDeMetodo = () -> SaudacaoUtil.saudar(horaValida);
+//        Executable chamadaInvalidaDeMetodo = () -> SaudacaoUtil.saudar(horaValida);
         //Assert
-        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, chamadaInvalidaDeMetodo);
-        assertEquals("Hora inválida", e.getMessage());
+//        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, chamadaInvalidaDeMetodo);
+//        assertEquals("Hora inválida", e.getMessage());
+
+        /*
+        * Com AssertJ
+        * */
+
+        // Modo depreciado, para recuperar verificar e verificar a exception
+//        IllegalArgumentException e = catchThrowableOfType(() -> SaudacaoUtil.saudar(horaValida), IllegalArgumentException.class);
+//        assertThat(e).hasMessage("Hora inválida");
+
+        // Modo com verificação encadeada
+        assertThatThrownBy(() -> SaudacaoUtil.saudar(horaValida))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Hora inválida");
     }
 
     /**
