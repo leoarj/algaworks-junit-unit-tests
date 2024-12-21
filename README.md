@@ -75,3 +75,17 @@ O que é Mock
         - Facilidade de definir um comportamento fictício dinâmico em uma classe
         - Verificar comportamento da classe com mock
 Mockito + JUnit
+
+Análise de cobertura
+Test coverage
+
+JACOCO
+Java Code Coverage
+
+Linhas cobertas e não cobertas
+Regras de negócio = 100%
+Verificar cobertura de operações CRUD
+
+Lacunas = Mostra apenas por onde o teste passou, não leva em conta as asserções.
+
+JACOCO opera a nível de byte-code, então, mostrará mais métodos na cobertura.
